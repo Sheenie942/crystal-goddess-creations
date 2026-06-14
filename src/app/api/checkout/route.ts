@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     const idempotencyKey = `order-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-    const { result } = await squareClient.payments.createPayment({
+    const payment = await squareClient.payments.create({
       sourceId,
       idempotencyKey,
       locationId,
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       note: "Crystal Goddess Creations order",
     });
 
-    return NextResponse.json({ payment: result.payment });
+    return NextResponse.json({ payment: payment.payment });
   } catch (error) {
     console.error("Square payment error:", error);
     return NextResponse.json(
