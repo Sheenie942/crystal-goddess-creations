@@ -9,12 +9,14 @@ export function getSquareClient(): SquareClient {
   if (!token) {
     throw new Error("SQUARE_ACCESS_TOKEN environment variable is not set.");
   }
+  const useSandbox =
+    process.env.NODE_ENV === "development" &&
+    process.env.SQUARE_USE_SANDBOX === "true";
   _client = new SquareClient({
     token,
-    environment:
-      process.env.NODE_ENV === "development"
-        ? SquareEnvironment.Sandbox
-        : SquareEnvironment.Production,
+    environment: useSandbox
+      ? SquareEnvironment.Sandbox
+      : SquareEnvironment.Production,
   });
   return _client;
 }
