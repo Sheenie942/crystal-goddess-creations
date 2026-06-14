@@ -9,7 +9,7 @@ export async function GET() {
     let wolfId: string | null = null;
     let wolfObj: Record<string, unknown> | null = null;
     for await (const item of await client.catalog.list({ types: "ITEM" })) {
-      const o = item as Record<string, unknown>;
+      const o = item as unknown as Record<string, unknown>;
       const name = ((o.itemData as Record<string, unknown>)?.name as string) ?? "";
       if (name.toLowerCase().includes("wolf")) {
         wolfId = o.id as string;
