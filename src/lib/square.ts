@@ -12,9 +12,9 @@ export function getSquareClient(): SquareClient {
   _client = new SquareClient({
     token,
     environment:
-      process.env.SQUARE_ENVIRONMENT === "production"
-        ? SquareEnvironment.Production
-        : SquareEnvironment.Sandbox,
+      process.env.NODE_ENV === "development"
+        ? SquareEnvironment.Sandbox
+        : SquareEnvironment.Production,
   });
   return _client;
 }
