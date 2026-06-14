@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Currency } from "square";
 import { squareClient } from "@/lib/square";
 
 export interface CheckoutLineItem {
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
       locationId,
       amountMoney: {
         amount: BigInt(totalAmount),
-        currency: lineItems[0]?.currency ?? "AUD",
+        currency: (lineItems[0]?.currency ?? "AUD") as Currency,
       },
       note: "Crystal Goddess Creations order",
     });

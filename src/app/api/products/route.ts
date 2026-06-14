@@ -70,12 +70,13 @@ export async function GET(request: Request) {
         descriptionHtml?: string;
         labelColor?: string;
         categoryId?: string;
+        categories?: Array<{ id?: string }>;
         imageIds?: string[];
         variations?: Array<{ id?: string; itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } } }>;
       };
 
       // Determine category slug from Square category name via mapping
-      const squareCategoryId = (item.categories as Array<{ id?: string }> | undefined)?.[0]?.id;
+      const squareCategoryId = item.categories?.[0]?.id;
       const squareCategoryName = squareCategoryId
         ? categoryNameMap.get(squareCategoryId) ?? ""
         : "";
