@@ -22,7 +22,10 @@ export const metadata: Metadata = {
     template: "%s | Crystal Goddess Creations",
   },
   icons: {
-    icon: "/CrystalGoddessNoName.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/CrystalGoddessNoName.png", type: "image/png" },
+    ],
     apple: "/CrystalGoddessNoName.png",
   },
   description:
