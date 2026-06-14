@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://crystalgoddess.netlify.app";
     const res = await fetch(
       `${baseUrl}/api/products?category=${categorySlug}`,
       { next: { revalidate: 300 } }

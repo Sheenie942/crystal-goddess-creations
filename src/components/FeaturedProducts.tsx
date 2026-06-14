@@ -4,7 +4,7 @@ import { ShoppingBag } from "lucide-react";
 // Server component — fetches featured products at request time
 async function getFeaturedProducts() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://crystalgoddess.netlify.app";
     const res = await fetch(`${baseUrl}/api/products?featured=true&limit=8`, {
       next: { revalidate: 300 },
     });

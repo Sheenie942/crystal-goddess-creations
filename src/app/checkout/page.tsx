@@ -29,7 +29,7 @@ export default function CheckoutPage() {
     if (!window.Square) return;
     try {
       const payments = await window.Square.payments(
-        process.env.NEXT_PUBLIC_SQUARE_APP_ID!,
+        "sq0idp-InXv53jQpgOaqi3d2Ti36Q",
         "SQUARE_LOCATION" // replaced at runtime
       );
       const card = await payments.card();

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 async function getAllProducts(): Promise<Product[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://crystalgoddess.netlify.app";
     const res = await fetch(`${baseUrl}/api/products`, {
       next: { revalidate: 300 },
     });
