@@ -75,6 +75,21 @@ export async function GET(request: Request) {
         variations?: Array<{ id?: string; itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } } }>;
       };
 
+      // DEBUG: log raw data for the wolf item
+      if ((item.name ?? "").toLowerCase().includes("wolf")) {
+        console.log("DEBUG wolf item keys:", Object.keys(obj));
+        console.log("DEBUG wolf customAttributeValues:", JSON.stringify(obj.customAttributeValues, null, 2));
+        console.log("DEBUG wolf descriptionHtml:", item.descriptionHtml);
+      }
+
+      // Custom attributes live on the catalog object itself, not itemData
+      const customAttrs = (obj.customAttributeValues ?? {}) as Record<string, { booleanValue?: boolean; stringValue?: string }>;
+      const isFeaturedAttr = Object.values(customAttrs).some(
+        (attr) => attr.booleanValue === true
+          || attr.stringValue?.toLowerCase() === "true"
+          || attr.stringValue?.toLowerCase() === "yes"
+      );
+
       // Determine category slug from Square category name via mapping
       const squareCategoryId = item.categories?.[0]?.id;
       const squareCategoryName = squareCategoryId
@@ -110,7 +125,7 @@ export async function GET(request: Request) {
         subcategorySlug: SQUARE_SUBCATEGORY_MAP[squareCategoryName] ?? undefined,
         images,
         variants,
-        isFeatured: (item.descriptionHtml ?? "").toLowerCase().includes("featured"),
+        isFeatured: isFeaturedAttr || (item.descriptionHtml ?? "").toLowerCase().includes("featured"),
         isNewArrival: (item.descriptionHtml ?? "").toLowerCase().includes("new arrival"),
         tags: item.labelColor ? [item.labelColor] : [],
       };
