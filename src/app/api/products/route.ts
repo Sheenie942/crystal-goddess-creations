@@ -61,7 +61,7 @@ export async function GET(request: Request) {
 
     const products: Product[] = [];
 
-    for (const obj of objects as Array<{ id?: string; itemData?: Record<string, unknown> }>) {
+    for (const obj of objects as Array<{ id?: string; itemData?: Record<string, unknown>; customAttributeValues?: Record<string, unknown> }>) {
       if (!obj.itemData) continue;
 
       const item = obj.itemData as {
