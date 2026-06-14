@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0d0a14;
+  --foreground: #f3e8ff;
+  --color-brand-purple: #7c3aed;
+  --color-brand-pink: #ec4899;
+  --color-brand-lavender: #c084fc;
+  --color-brand-deep: #1e1030;
+  --color-brand-gold: #d4af37;
 }
 
 @theme inline {
@@ -10,14 +15,60 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-brand-purple: #7c3aed;
+  --color-brand-pink: #ec4899;
+  --color-brand-lavender: #c084fc;
+  --color-brand-deep: #1e1030;
+  --color-brand-gold: #d4af37;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
+
+/* Font utilities */
+.font-serif {
+  font-family: var(--font-cinzel), Georgia, serif;
+}
+
+html, body {
+  background-color: #0d0a14;
+  color: #f3e8ff;
+  min-height: 100%;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1e1030; }
+::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 3px; }
+
+/* Selection */
+::selection { background: #7c3aed; color: white; }
+
+/* Mystical gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #c084fc 0%, #ec4899 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card glow hover */
+.card-glow {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card-glow:hover {
+  box-shadow: 0 0 25px rgba(192, 132, 252, 0.35);
+  transform: translateY(-3px);
+}
+
+/* Mystical divider */
+.divider-glow {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #7c3aed, #ec4899, #7c3aed, transparent);
+}
+
 
 body {
   background: var(--background);
