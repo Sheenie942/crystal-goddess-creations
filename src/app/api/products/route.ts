@@ -75,13 +75,6 @@ export async function GET(request: Request) {
         variations?: Array<{ id?: string; itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } } }>;
       };
 
-      // DEBUG: log raw data for the wolf item
-      if ((item.name ?? "").toLowerCase().includes("wolf")) {
-        console.log("DEBUG wolf item keys:", Object.keys(obj));
-        console.log("DEBUG wolf customAttributeValues:", JSON.stringify(obj.customAttributeValues, null, 2));
-        console.log("DEBUG wolf descriptionHtml:", item.descriptionHtml);
-      }
-
       // Custom attributes live on the catalog object itself, not itemData
       const customAttrs = (obj.customAttributeValues ?? {}) as Record<string, { booleanValue?: boolean; stringValue?: string }>;
       const isFeaturedAttr = Object.values(customAttrs).some(
