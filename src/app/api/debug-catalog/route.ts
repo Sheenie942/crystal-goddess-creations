@@ -26,11 +26,17 @@ export async function GET() {
     const safe = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, val) =>
       typeof val === "bigint" ? val.toString() : val
     ));
-console.log("DEBUG wolf itemData:", itemData.toString(), Object.keys(itemData));
+const safeItemDataStr = JSON.stringify(itemData, (_k, val) =>
+  typeof val === "bigint" ? val.toString() : val
+);
+
+    console.log("DEBUG wolf itemData:", itemData.toString(), Object.keys(itemData));
+    console.log("DEBUG wolf itemData:", safeItemDataStr);
+    
     return NextResponse.json({
       id: wolfObj.id,
       name: itemData.name,
-      itemData: itemData.toString(),
+      itemData: safeItemDataStr,
       // Candidate fields for "featured" flag:
       sortName: safe(itemData.sortName ?? null),
       kitchenName: safe(itemData.kitchenName ?? null),
