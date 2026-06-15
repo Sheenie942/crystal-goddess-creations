@@ -10,7 +10,7 @@ export async function GET() {
     for await (const item of await client.catalog.list({ types: "ITEM" })) {
       const o = item as unknown as Record<string, unknown>;
       const name = ((o.itemData as Record<string, unknown>)?.name as string) ?? "";
-      if (name.toLowerCase().includes("wolf")) {
+      if (name.toLowerCase().includes("wolf #2") || name.toLowerCase().includes("wolf#2")) {
         wolfObj = o;
         break;
       }
