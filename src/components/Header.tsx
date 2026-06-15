@@ -60,14 +60,14 @@ export default function Header({
             className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
           >
             <Image
-              src="/CrystalGoddessNoName.png"
+              src="/CrystalGoddess.png"
               alt="Crystal Goddess Creations"
               width={160}
               height={160}
               className="rounded-full object-cover"
               priority
             />
-            <span className="font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
+            <span className="display:none;font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
               Crystal Goddess Creations
             </span>
           </Link>

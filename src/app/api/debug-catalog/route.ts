@@ -21,7 +21,7 @@ export async function GET() {
     }
 
     const itemData = wolfObj.itemData as Record<string, unknown>;
-    console.log("DEBUG wolf itemData:", JSON.stringify(itemData, null, 2));
+    console.log("DEBUG wolf itemData:", itemData);
     // Helper to make BigInt-safe plain objects
     const safe = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, val) =>
       typeof val === "bigint" ? val.toString() : val
