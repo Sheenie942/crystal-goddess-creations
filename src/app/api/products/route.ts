@@ -114,7 +114,7 @@ export async function GET(request: Request) {
         return {
           id: v.id ?? "",
           name: vdata?.name ?? "Regular",
-          price: toNumber(price?.amount),
+          price: typeof price?.amount === "number" ? price.amount : toNumber(price?.amount as bigint | null | undefined),
           currency: price?.currency ?? "AUD",
           inventoryCount: undefined,
         };
