@@ -21,7 +21,7 @@ export async function GET() {
     }
 
     const itemData = wolfObj.itemData as Record<string, unknown>;
-
+    console.log("DEBUG wolf itemData:", JSON.stringify(itemData, null, 2));
     // Helper to make BigInt-safe plain objects
     const safe = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, val) =>
       typeof val === "bigint" ? val.toString() : val
@@ -30,6 +30,7 @@ export async function GET() {
     return NextResponse.json({
       id: wolfObj.id,
       name: itemData.name,
+      itemData: itemData,
       // Candidate fields for "featured" flag:
       sortName: safe(itemData.sortName ?? null),
       kitchenName: safe(itemData.kitchenName ?? null),
