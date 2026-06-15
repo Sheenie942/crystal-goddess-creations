@@ -62,14 +62,14 @@ export default function Header({
             <Image
               src="/CrystalGoddess.png"
               alt="Crystal Goddess Creations"
-              width={160}
-              height={160}
+              width={180}
+              height={180}
               className="rounded-full object-cover"
               priority
             />
-            /*<span className="display:none;font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
+            {/*<span className="display:none;font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
               Crystal Goddess Creations
-            </span>
+            </span>*/ }
           </Link>
 
           {/* Cart */}
