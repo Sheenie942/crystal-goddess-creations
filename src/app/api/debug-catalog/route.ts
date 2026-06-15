@@ -1,52 +1,47 @@
 import { NextResponse } from "next/server";
 import { getSquareClient } from "@/lib/square";
 
+const SQUARE_BASE = "https://connect.squareup.com/v2";
+
+async function squareFetch(path: string) {
+  const token = process.env.SQUARE_ACCESS_TOKEN ?? process.env.SQUARE_TOKEN;
+  const res = await fetch(`${SQUARE_BASE}${path}`, {
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+  });
+  return res.json();
+}
+
 export async function GET() {
   try {
     const client = getSquareClient();
 
-    // Find the wolf item
-    let wolfObj: Record<string, unknown> | null = null;
+    // Find the wolf item ID
+    let wolfId: string | null = null;
     for await (const item of await client.catalog.list({ types: "ITEM" })) {
       const o = item as unknown as Record<string, unknown>;
       const name = ((o.itemData as Record<string, unknown>)?.name as string) ?? "";
       if (name.toLowerCase().includes("wolf #2") || name.toLowerCase().includes("wolf#2")) {
-        wolfObj = o;
+        wolfId = o.id as string;
         break;
       }
     }
 
-    if (!wolfObj) {
+    if (!wolfId) {
       return NextResponse.json({ error: "Wolf item not found in catalog" });
     }
 
-    const itemData = wolfObj.itemData as Record<string, unknown>;
-    
-    // Helper to make BigInt-safe plain objects
-    const safe = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, val) =>
-      typeof val === "bigint" ? val.toString() : val
-    ));
-const safeItemDataStr = JSON.stringify(itemData, (_k, val) =>
-  typeof val === "bigint" ? val.toString() : val
-);
+    // 1. List all custom attribute definitions for ITEM
+    const definitions = await squareFetch("/catalog/custom-attribute-definitions?limit=100");
 
-    console.log("DEBUG wolf itemData:", itemData.toString(), Object.keys(itemData));
-    console.log("DEBUG wolf itemData:", safeItemDataStr);
-    
+    // 2. List all custom attributes on this specific item
+    const itemCustomAttrs = await squareFetch(
+      `/catalog/object/${wolfId}/custom-attributes`
+    );
+
     return NextResponse.json({
-      id: wolfObj.id,
-      name: itemData.name,
-      itemData: safeItemDataStr,
-      // Candidate fields for "featured" flag:
-      sortName: safe(itemData.sortName ?? null),
-      kitchenName: safe(itemData.kitchenName ?? null),
-      labelColor: safe(itemData.labelColor ?? null),
-      reportingCategory: safe(itemData.reportingCategory ?? null),
-      ecomSeoData: safe(itemData.ecomSeoData ?? null),
-      description: safe(itemData.description ?? null),
-      descriptionHtml: safe(itemData.descriptionHtml ?? null),
-      // All itemData keys for reference:
-      itemDataKeys: Object.keys(itemData),
+      wolfId,
+      definitions,
+      itemCustomAttrs,
     });
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
