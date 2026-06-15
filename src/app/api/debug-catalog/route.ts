@@ -12,27 +12,44 @@ async function squareFetch(path: string) {
 
 export async function GET() {
   try {
-    // 1. List custom attribute definitions
+    // Paginate through ALL items to find wolf #2
+    let wolfId: string | null = null;
+    let cursor: string | undefined;
+
+    outer: do {
+      const url = `/catalog/list?types=ITEM&limit=100${cursor ? `&cursor=${cursor}` : ""}`;
+      const page = await squareFetch(url) as { objects?: Array<{ id: string; item_data?: { name?: string } }>; cursor?: string };
+      for (const obj of page.objects ?? []) {
+        const name = obj.item_data?.name?.toLowerCase() ?? "";
+        if (name.includes("wolf #2") || name.includes("wolf#2")) {
+          wolfId = obj.id;
+          break outer;
+        }
+      }
+      cursor = page.cursor;
+    } while (cursor);
+
+    if (!wolfId) {
+      return NextResponse.json({ error: "Wolf #2 not found in catalog" });
+    }
+
+    // Fetch the item directly with custom attribute values
+    const itemDirect = await squareFetch(
+      `/catalog/object/${wolfId}?include_related_objects=false&include_category_path_to_root=false`
+    );
+
+    // Fetch custom attributes separately
+    const customAttrs = await squareFetch(`/catalog/object/${wolfId}/custom-attributes`);
+
+    // Also list definitions
     const definitions = await squareFetch("/catalog/custom-attribute-definitions?limit=100");
 
-    // 2. Get a page of catalog items with custom attribute values included
-    const catalogWithAttrs = await squareFetch(
-      "/catalog/list?types=ITEM&include_custom_attribute_values=true&limit=10"
-    );
-
-    // Find wolf #2
-    const wolfItem = (catalogWithAttrs.objects ?? []).find((o: { item_data?: { name?: string } }) =>
-      o.item_data?.name?.toLowerCase().includes("wolf #2") ||
-      o.item_data?.name?.toLowerCase().includes("wolf#2")
-    );
-
     return NextResponse.json({
+      wolfId,
+      itemTopLevelKeys: Object.keys(itemDirect.object ?? {}),
+      itemCustomAttributeValues: (itemDirect.object as Record<string, unknown>)?.custom_attribute_values ?? null,
+      customAttrs,
       definitions,
-      wolfFound: !!wolfItem,
-      wolfId: wolfItem?.id ?? null,
-      wolfCustomAttrs: wolfItem?.custom_attribute_values ?? null,
-      wolfItemDataKeys: wolfItem ? Object.keys(wolfItem.item_data ?? {}) : [],
-      sampleItemKeys: catalogWithAttrs.objects?.[0] ? Object.keys(catalogWithAttrs.objects[0]) : [],
     });
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
