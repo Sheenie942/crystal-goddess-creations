@@ -30,6 +30,10 @@ const FAQS = [
         a: "Standard Australian shipping typically takes 3–7 business days depending on your location. You will receive a tracking number once your order has been dispatched.",
       },
       {
+        q: "How much does shipping cost?",
+        a: "I ship via Australia Post Parcel Post with flat rate satchels (under 5kg). Rates are: Extra Small (215×280mm) $10.05 · Small (355×225mm) $11.50 · Medium (390×270mm) $15.65 · Large (405×315mm) $19.75 · Extra Large (510×440mm) $23.80. The appropriate satchel size is chosen based on your order.",
+      },
+      {
         q: "What if my order arrives damaged?",
         a: "I pack every order with great care, but if something arrives damaged please email me within 48 hours with a photo and I&apos;ll make it right.",
       },

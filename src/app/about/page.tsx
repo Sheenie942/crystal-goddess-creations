@@ -20,31 +20,53 @@ export default function AboutPage() {
 
       <div className="prose prose-invert max-w-none space-y-6 text-purple-200/90 text-base leading-relaxed">
         <p>
-          Welcome to <strong className="text-purple-100">Crystal Goddess Creations</strong> — a
-          home-based Australian business born from my deep love of crystals, healing energy, and
-          handcrafted beauty. I&apos;m <strong className="text-pink-300">Leakona Fine</strong>, and
-          this little shop is my heart made visible.
+          Hi, I&apos;m <strong className="text-pink-300">Leakona</strong>, the creator behind{" "}
+          <strong className="text-purple-100">Crystal Goddess Creations</strong>. I live in Wilton,
+          NSW, Australia, surrounded by family, animals, nature, and the chaos of everyday life.
         </p>
 
         <p>
-          My journey with crystals began as a personal one — drawn to their energy, their beauty,
-          and the way each stone carries its own unique story. Over time that love grew into a
-          passion for creating, and I found myself spending hours at my workbench crafting pieces
-          that felt as magical to make as they are to wear.
+          Crystal Goddess Creations began many years ago with a single wire-wrapped crystal. What
+          started as a creative outlet quickly became a passion, and with the encouragement of some
+          beautiful friends, I kept creating, learning, and pushing myself to see what was possible.
         </p>
 
         <p>
-          Jewellery-making is where my soul lights up. There&apos;s something deeply satisfying about
-          taking a raw crystal — something the earth has spent thousands of years forming — and
-          turning it into a wearable piece of art. Every necklace, bracelet, earring, and ring I
-          create is made by hand with genuine care and intention. No two pieces are ever exactly
-          the same.
+          I&apos;ve always been drawn to crystals. I love their natural beauty, their imperfections,
+          their colours, and the fact that no two are ever exactly alike. Every stone has its own
+          personality, and I see my role as bringing that personality to life rather than covering
+          it up.
         </p>
 
         <p>
-          Beyond jewellery, I curate a beautiful range of crystals, selenite lamps, goddess boxes,
-          and more — each item chosen because I genuinely love it and believe in what it brings.
-          I only stock things I&apos;d be proud to gift to someone I love.
+          I don&apos;t follow trends, and I don&apos;t really have a particular style. I create
+          whatever sparks my imagination in the moment. To me, these pieces aren&apos;t just
+          jewellery — they&apos;re wearable art.
+        </p>
+
+        <p>
+          Every creation starts with a crystal. Sometimes I see a landscape hidden within the
+          stone. Sometimes a dragon, a goddess, a creature, or a story waiting to be told. I sit
+          down with wire and imagination and let the piece unfold. Some designs arrive fully formed
+          in my mind, while others seem to create themselves as I work.
+        </p>
+
+        <p>
+          Truthfully, most of the time I have no idea what I&apos;m doing. I simply trust the
+          process and follow where the crystal leads. Somehow, it usually works out!
+        </p>
+
+        <p>
+          Crystal Goddess Creations isn&apos;t a big company or a carefully crafted brand story.
+          It&apos;s just me, sharing the things I love. The crystals that stop me in my tracks. The
+          stories that live in my imagination. The joy of turning something beautiful from nature
+          into something that can be worn and treasured.
+        </p>
+
+        <p>
+          So whether you&apos;re here because you love crystals, appreciate handmade art, or
+          you&apos;re simply curious to see what happens when creativity meets a little bit of chaos
+          — welcome. I&apos;m glad you&apos;re here. ❤️
         </p>
 
         <div className="my-8 p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-pink-900/20 border border-purple-700/40">
@@ -77,7 +99,7 @@ export default function AboutPage() {
         <div className="text-center mt-10">
           <p className="text-2xl select-none">✦ ✧ ✦</p>
           <p className="text-purple-300/60 text-sm mt-2 italic">
-            Made with love, crystals, and a little bit of magic. — Leakona 💜
+            &ldquo;Nature&apos;s art, made to be worn&rdquo; — Leakona 💜
           </p>
         </div>
       </div>
