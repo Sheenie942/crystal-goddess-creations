@@ -43,7 +43,7 @@ export default function Header({
   return (
     <>
       {/* ── Top bar ── */}
-      <header className="sticky top-0 z-40 bg-[#0d0a14]/95 backdrop-blur border-b border-purple-900/40">
+      <header className="sticky top-0 z-40 bg-[#1a1235]/95 backdrop-blur border-b border-purple-900/40">
         <div className="max-w-7xl mx-auto px-4 h-40 flex items-center justify-between">
           {/* Hamburger */}
           <button
@@ -67,7 +67,7 @@ export default function Header({
               className="rounded-full object-cover"
               priority
             />
-            <span className="display:none;font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
+            /*<span className="display:none;font-serif text-xl font-bold gradient-text tracking-wide whitespace-nowrap hidden sm:block">
               Crystal Goddess Creations
             </span>
           </Link>
