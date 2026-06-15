@@ -22,17 +22,22 @@ export async function GET() {
 
     const itemData = wolfObj.itemData as Record<string, unknown>;
 
+    // Helper to make BigInt-safe plain objects
+    const safe = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, val) =>
+      typeof val === "bigint" ? val.toString() : val
+    ));
+
     return NextResponse.json({
       id: wolfObj.id,
       name: itemData.name,
       // Candidate fields for "featured" flag:
-      sortName: itemData.sortName ?? null,
-      kitchenName: itemData.kitchenName ?? null,
-      labelColor: itemData.labelColor ?? null,
-      reportingCategory: itemData.reportingCategory ?? null,
-      ecomSeoData: itemData.ecomSeoData ?? null,
-      description: itemData.description ?? null,
-      descriptionHtml: itemData.descriptionHtml ?? null,
+      sortName: safe(itemData.sortName ?? null),
+      kitchenName: safe(itemData.kitchenName ?? null),
+      labelColor: safe(itemData.labelColor ?? null),
+      reportingCategory: safe(itemData.reportingCategory ?? null),
+      ecomSeoData: safe(itemData.ecomSeoData ?? null),
+      description: safe(itemData.description ?? null),
+      descriptionHtml: safe(itemData.descriptionHtml ?? null),
       // All itemData keys for reference:
       itemDataKeys: Object.keys(itemData),
     });
