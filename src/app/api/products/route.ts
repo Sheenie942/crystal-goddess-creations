@@ -78,8 +78,8 @@ export async function GET(request: Request) {
         image_ids?: string[];
         variations?: Array<{
           id?: string;
-          item_variation_data?: { name?: string; price_money?: { amount?: bigint | number; currency?: string } };
-          itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } };
+          item_variation_data?: { name?: string; price_money?: { amount?: bigint | number; currency?: string }; priceMoney?: { amount?: bigint | number; currency?: string } };
+          itemVariationData?: { name?: string; price_money?: { amount?: bigint | number; currency?: string }; priceMoney?: { amount?: bigint; currency?: string } };
         }>;
       };
 
