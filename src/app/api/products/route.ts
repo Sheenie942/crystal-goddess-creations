@@ -61,26 +61,33 @@ export async function GET(request: Request) {
 
     const products: Product[] = [];
 
-    for (const obj of objects as Array<{ id?: string; itemData?: Record<string, unknown>; customAttributeValues?: Record<string, unknown> }>) {
-      if (!obj.itemData) continue;
+    for (const obj of objects as Array<{ id?: string; item_data?: Record<string, unknown>; itemData?: Record<string, unknown>; custom_attribute_values?: Record<string, unknown> }>) {
+      // REST API uses item_data (snake_case); SDK uses itemData (camelCase)
+      const rawItem = obj.item_data ?? obj.itemData;
+      if (!rawItem) continue;
 
-      const item = obj.itemData as {
+      const item = rawItem as {
         name?: string;
         description?: string;
         descriptionHtml?: string;
+        description_html?: string;
         labelColor?: string;
-        categoryId?: string;
+        label_color?: string;
         categories?: Array<{ id?: string }>;
         imageIds?: string[];
-        variations?: Array<{ id?: string; itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } } }>;
+        image_ids?: string[];
+        variations?: Array<{
+          id?: string;
+          item_variation_data?: { name?: string; price_money?: { amount?: bigint | number; currency?: string } };
+          itemVariationData?: { name?: string; priceMoney?: { amount?: bigint; currency?: string } };
+        }>;
       };
 
-      // Custom attributes live on the catalog object itself, not itemData
-      const customAttrs = (obj.customAttributeValues ?? {}) as Record<string, { booleanValue?: boolean; stringValue?: string }>;
+      // Check custom_attribute_values (from REST API) for any boolean true or string "Featured"
+      const customAttrs = (obj.custom_attribute_values ?? {}) as Record<string, { boolean_value?: boolean; string_value?: string; type?: string }>;
       const isFeaturedAttr = Object.values(customAttrs).some(
-        (attr) => attr.booleanValue === true
-          || attr.stringValue?.toLowerCase() === "true"
-          || attr.stringValue?.toLowerCase() === "yes"
+        (attr) => attr.boolean_value === true
+          || attr.string_value?.toLowerCase() === "featured"
       );
 
       // Determine category slug from Square category name via mapping
@@ -94,22 +101,28 @@ export async function GET(request: Request) {
       if (categoryFilter && categorySlug !== categoryFilter) continue;
 
       // Build images array
-      const images: ProductImage[] = (item.imageIds ?? []).map((id: string) => ({
+      const imageIds = item.imageIds ?? item.image_ids ?? [];
+      const images: ProductImage[] = imageIds.map((id: string) => ({
         id,
         url: imageMap.get(id) ?? "",
       })).filter((img: ProductImage) => img.url);
 
       // Build variants
-      const variants: ProductVariant[] = (item.variations ?? []).map((v) => ({
-        id: v.id ?? "",
-        name: v.itemVariationData?.name ?? "Regular",
-        price: toNumber(v.itemVariationData?.priceMoney?.amount),
-        currency: v.itemVariationData?.priceMoney?.currency ?? "AUD",
-        inventoryCount: undefined,
-      }));
+      const variants: ProductVariant[] = (item.variations ?? []).map((v) => {
+        const vdata = v.item_variation_data ?? v.itemVariationData;
+        const price = vdata?.price_money ?? vdata?.priceMoney;
+        return {
+          id: v.id ?? "",
+          name: vdata?.name ?? "Regular",
+          price: toNumber(price?.amount),
+          currency: price?.currency ?? "AUD",
+          inventoryCount: undefined,
+        };
+      });
 
       if (variants.length === 0) continue;
 
+      const descHtml = item.descriptionHtml ?? item.description_html ?? "";
       const product: Product = {
         id: obj.id ?? "",
         name: item.name ?? "Unnamed product",
@@ -118,9 +131,9 @@ export async function GET(request: Request) {
         subcategorySlug: SQUARE_SUBCATEGORY_MAP[squareCategoryName] ?? undefined,
         images,
         variants,
-        isFeatured: isFeaturedAttr || (item.descriptionHtml ?? "").toLowerCase().includes("featured"),
-        isNewArrival: (item.descriptionHtml ?? "").toLowerCase().includes("new arrival"),
-        tags: item.labelColor ? [item.labelColor] : [],
+        isFeatured: isFeaturedAttr || descHtml.toLowerCase().includes("featured"),
+        isNewArrival: descHtml.toLowerCase().includes("new arrival"),
+        tags: (item.labelColor ?? item.label_color) ? [(item.labelColor ?? item.label_color)!] : [],
       };
 
       if (featuredOnly && !product.isFeatured) continue;

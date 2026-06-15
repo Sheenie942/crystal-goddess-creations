@@ -1,5 +1,28 @@
 import { getSquareClient } from "@/lib/square";
 
+const SQUARE_BASE = "https://connect.squareup.com/v2";
+
+async function squareFetch(path: string) {
+  const token = process.env.SQUARE_ACCESS_TOKEN ?? process.env.SQUARE_TOKEN;
+  const res = await fetch(`${SQUARE_BASE}${path}`, {
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+  });
+  return res.json() as Promise<{ objects?: Array<Record<string, unknown>>; cursor?: string }>;
+}
+
+/** Fetch all ITEM objects via REST API (includes custom_attribute_values) */
+async function collectItemsRest(): Promise<Array<Record<string, unknown>>> {
+  const objects: Array<Record<string, unknown>> = [];
+  let cursor: string | undefined;
+  do {
+    const url = `/catalog/list?types=ITEM&limit=100${cursor ? `&cursor=${cursor}` : ""}`;
+    const page = await squareFetch(url);
+    for (const obj of page.objects ?? []) objects.push(obj);
+    cursor = page.cursor;
+  } while (cursor);
+  return objects;
+}
+
 async function collectCatalog(types: string) {
   const client = getSquareClient();
   const objects: unknown[] = [];
@@ -22,7 +45,7 @@ export async function getCatalogData() {
     return catalogCache;
   }
   const [objects, imageObjects, catObjects] = await Promise.all([
-    collectCatalog("ITEM"),
+    collectItemsRest(),
     collectCatalog("IMAGE"),
     collectCatalog("CATEGORY"),
   ]);
